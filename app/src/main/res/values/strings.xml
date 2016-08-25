@@ -24,7 +24,7 @@
     <string name="electric_fan_setting_air_direction">风向</string>
     <string name="electric_fan_setting_time">定时</string>
     <string name="electric_fan_setting_confirm">完成设置</string>
-    <string name="electric_fan_setting_health_mode">按遥控确定键，进入健康模式</string>
+    <string name="electric_fan_setting_health_mode">按遥控器确定键，进入健康模式</string>
     <string name="freezer_cold_storage">冷藏</string>
     <string name="freezer_frozen">冷冻</string>
     <string name="freezer_deep_frozen">极冻</string>

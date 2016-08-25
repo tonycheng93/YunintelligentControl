@@ -3,4 +3,12 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@drawable/air_cleaner_setting_background">
+    <TextView
+        android:text="@string/electric_fan_setting_health_mode"
+        android:textSize="@dimen/txt_big_large"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

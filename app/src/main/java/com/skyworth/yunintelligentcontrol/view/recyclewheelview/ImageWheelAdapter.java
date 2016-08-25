@@ -40,9 +40,10 @@ public class ImageWheelAdapter<T> extends RecyclerView.Adapter<ImageWheelAdapter
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ImageView imageView = new ImageView(parent.getContext());
-        imageView.setLayoutParams(new RecyclerView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
+//        imageView.setLayoutParams(new RecyclerView.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+//        ));
+        imageView.setLayoutParams(new RecyclerView.LayoutParams(350,800));
         return new MyViewHolder(imageView);
     }
 

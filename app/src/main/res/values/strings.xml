@@ -24,5 +24,19 @@
     <string name="electric_fan_setting_air_direction">风向</string>
     <string name="electric_fan_setting_time">定时</string>
     <string name="electric_fan_setting_confirm">完成设置</string>
+    <string name="electric_fan_setting_health_mode">按遥控确定键，进入健康模式</string>
+    <string name="freezer_cold_storage">冷藏</string>
+    <string name="freezer_frozen">冷冻</string>
+    <string name="freezer_deep_frozen">极冻</string>
+    <string name="freezer_setting_complete">完成设置</string>
+    <string name="freezer_energy_save">节能</string>
+    <string name="box_setting_switch_txt">开关</string>
+    <string name="box_setting_volume">音量</string>
+    <string name="box_setting_channel">频道</string>
+    <string name="box_setting_time">定时</string>
+    <string name="air_cleaner_setting_pm_txt">PM2.5</string>
+    <string name="air_cleaner_setting_air_speed">风速</string>
+    <string name="air_condition_setting_model_txt">模式</string>
+    <string name="air_condition_setting_temp">温度</string>
 
 </resources>

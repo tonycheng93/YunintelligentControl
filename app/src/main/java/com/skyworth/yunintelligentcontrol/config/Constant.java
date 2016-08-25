@@ -21,4 +21,6 @@ package com.skyworth.yunintelligentcontrol.config;
 public class Constant {
     // 开发阶段设置输出log日志，发布后关闭log日志输出
     public static final boolean ISDEBUG = true;
+    //Activity之间参数传递标志
+    public static final String EXTRA_NAME = "extra_flag";
 }

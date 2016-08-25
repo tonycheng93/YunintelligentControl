@@ -2,40 +2,52 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.skyworth.yunintelligentcontrol">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <uses-feature
         android:name="android.software.leanback"
-        android:required="true" />
+        android:required="true"/>
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false" />
+        android:required="false"/>
 
     <application
-        android:name="com.skyworth.yunintelligentcontrol.app.App"
+        android:name=".app.App"
         android:allowBackup="true"
         android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection|touchscreen|navigation|screenLayout|uiMode"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:launchMode="singleInstance"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name="com.skyworth.yunintelligentcontrol.activity.SplashActivity"
-            android:label="@string/app_name" >
+            android:name=".activity.SplashActivity"
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.skyworth.yunintelligentcontrol" />
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="com.skyworth.yunintelligentcontrol"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.skyworth.yunintelligentcontrol.activity.HomeActivity" />
-        <activity android:name="com.skyworth.yunintelligentcontrol.activity.ElectricFanActivity" />
-        <activity android:name="com.skyworth.yunintelligentcontrol.activity.EquipmentCenterActivity" />
-        <activity android:name="com.skyworth.yunintelligentcontrol.activity.ElectricFanSettingActivity" />
+        <activity android:name=".activity.HomeActivity"/>
+        <activity android:name=".activity.ElectricFanActivity"/>
+        <activity android:name=".activity.EquipmentCenterActivity"/>
+        <activity android:name=".activity.ElectricFanSettingActivity"/>
+        <activity android:name=".activity.FreezerActivity">
+        </activity>
+        <activity android:name=".activity.FreezerSettingActivity">
+        </activity>
+        <activity android:name=".activity.BoxSettingActivity">
+        </activity>
+        <activity android:name=".activity.AirCleanerSettingActivity">
+        </activity>
+        <activity android:name=".activity.AirConditionSettingActivity">
+        </activity>
     </application>
 
 </manifest>

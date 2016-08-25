@@ -37,10 +37,10 @@ public class BLEControl {
     private BluetoothDevice bluetoothDevice;
     private BluetoothManager bluetoothManager;
     //service ,characteristic读写相关的UUID
-    private final UUID SERVICE_READ_UUID = UUID.fromString("00001800-0000-1000-8000-00805F9B34FB");
-    private final UUID SERVICE_WRITE_UUID = UUID.fromString("0000190f-0000-1000-8000-00805F9B34FB");
-    private final UUID CHARACTER_READ_UUID = UUID.fromString("00002A01-0000-1000-8000-00805F9B34FB");
-    private final UUID CHARACTER_WRITE_UUID = UUID.fromString("0000ffe9-0000-1000-8000-00805f9b34fb");
+    private final UUID SERVICE_READ_UUID = UUID.fromString("00001801-0000-1000-8000-00805F9B34FB");
+    private final UUID SERVICE_WRITE_UUID = UUID.fromString("00002A4C-0000-1000-8000-00805F9B34FB");
+    private final UUID CHARACTER_READ_UUID = UUID.fromString("00002A03-0000-1000-8000-00805F9B34FB");
+    private final UUID CHARACTER_WRITE_UUID = UUID.fromString("0000FFE9-0000-1000-8000-00805F9B34FB");
 
     int count = 0;
     private final int CONNECTED = 0X01;
@@ -51,7 +51,7 @@ public class BLEControl {
     private BluetoothGattCharacteristic mReadCharacteristic = null;
 
     //获取GATT服务
-    public BluetoothGatt getBluetoothGatt(Context context, bool is) {
+    public BluetoothGatt getBluetoothGatt(Context context, boolean is) {
         mBluetoothGatt = bluetoothDevice.connectGatt(context, false, mCallback);
         return mBluetoothGatt;
 
@@ -59,6 +59,7 @@ public class BLEControl {
 
     //回调
     private final BluetoothGattCallback mCallback = new BluetoothGattCallback() {
+      //  Log.i("1111111111"," "+device);
         //当Characteristic为可读态时回调
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic, int status) {
@@ -112,23 +113,25 @@ public class BLEControl {
 
         //远端设备中的服务可用时回调
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            Log.i("1111111111"," service is changed");
             if (status == mBluetoothGatt.GATT_SUCCESS) {
                 BluetoothGattService mWriteService = mBluetoothGatt.getService(SERVICE_WRITE_UUID);
-                BluetoothGattService mReadService = mBluetoothGatt.getService(SERVICE_READ_UUID);
+              //  BluetoothGattService mReadService = mBluetoothGatt.getService(SERVICE_READ_UUID);
                 //BluetoothGattService  services = mBluetoothGatt.
                 if (mWriteService != null) {
+                    Log.i(BLE + "11111111", " mWriterCharaccteristic is not null");
                     mWriteCharacteristic = mWriteService.getCharacteristic(CHARACTER_WRITE_UUID);
                 } else {
                     Log.i(BLE + "11111111", " mWriterCharaccteristic is null");
                 }
-                if (mReadService != null) {
-                    mReadCharacteristic = mReadService.getCharacteristic(CHARACTER_READ_UUID);
-                    if (mReadCharacteristic != null) {
-                        boolean is = mBluetoothGatt.readCharacteristic(mReadCharacteristic);
-                    } else {
-                    }
-                } else {
-                }
+//                if (mReadService != null) {
+//                    mReadCharacteristic = mReadService.getCharacteristic(CHARACTER_READ_UUID);
+//                    if (mReadCharacteristic != null) {
+//                        boolean is = mBluetoothGatt.readCharacteristic(mReadCharacteristic);
+//                    } else {
+//                    }
+//                } else {
+//                }
             } else {
             }
             Log.i(BLE + ":servicesize", gatt.getServices().size() + "");
@@ -142,7 +145,7 @@ public class BLEControl {
             ReadCharacterValue(characteristic);
         }
 
-        ;
+
 
     };
 

@@ -8,10 +8,14 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.skyworth.yunintelligentcontrol.R;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * 可回收的滑轮view Created by voiddog on 2015/10/21.
@@ -104,7 +108,14 @@ public class RecycleWheelView extends RecyclerView {
         // mDirection =
         // a.getInt(R.styleable.RecycleWheelView_recycleWheelDirection, 0);
         mDirection = a.getInt(R.styleable.RecycleWheelView_recycleWheelDirection, 1);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext())
+        {
+            public boolean canScrollHorizontally()
+            {
+                return true;
+            }
+        };
+
         if (mDirection == 0) {
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         } else {
@@ -125,16 +136,16 @@ public class RecycleWheelView extends RecyclerView {
         return curPosition;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent e) {
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                mNeedAdjust = true;
-                break;
-            }
-        }
-        return super.onTouchEvent(e);
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent e) {
+//        switch (e.getAction()) {
+//            case MotionEvent.ACTION_DOWN: {
+//                mNeedAdjust = true;
+//                break;
+//            }
+//        }
+//        return super.onTouchEvent(e);
+//    }
 
     @Override
     public void onScrollStateChanged(int state) {
@@ -301,4 +312,10 @@ public class RecycleWheelView extends RecyclerView {
     public interface OnSelectItemListener {
         void onSelectChanged(int position);
     }
+
+//    @Override
+//    public void scrollToPosition(int position) {
+//        mNeedAdjust = true;
+//        super.scrollToPosition(position);
+//    }
 }

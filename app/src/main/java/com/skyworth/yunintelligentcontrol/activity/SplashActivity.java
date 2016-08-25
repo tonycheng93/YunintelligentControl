@@ -27,7 +27,7 @@ import android.view.Window;
  */
 public class SplashActivity extends Activity {
 
-	private static final int SPLASH_TIME = 3 * 1000;
+	private static final int SPLASH_TIME = 1 * 1000;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -11,6 +11,7 @@
  */
 package com.skyworth.yunintelligentcontrol.activity.base;
 
+import com.skyworth.yunintelligentcontrol.config.Constant;
 import com.skyworth.yunintelligentcontrol.utils.ActivityUtils;
 import com.skyworth.yunintelligentcontrol.utils.LogUtils;
 
@@ -40,9 +41,9 @@ public abstract class BaseActivity extends Activity {
 
 	private void init() {
 		setContentView();
+		getData();
 		findViews();
 		initView();
-		getData();
 	}
 
 	@Override
@@ -53,6 +54,13 @@ public abstract class BaseActivity extends Activity {
 	
 	public void Intent2Activity(@NonNull Class<?> targetActivity) {
 		startActivity(new Intent(this,targetActivity));
+	}
+
+	public void Intent2Activity(@NonNull String data,@NonNull Class<?> targetActivity){
+		Intent intent = new Intent();
+		intent.putExtra(Constant.EXTRA_NAME,data);
+		intent.setClass(this,targetActivity);
+		startActivity(intent);
 	}
 
 	public abstract void setContentView();// 设置Activity布局

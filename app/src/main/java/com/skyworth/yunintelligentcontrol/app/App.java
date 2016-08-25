@@ -14,6 +14,7 @@ package com.skyworth.yunintelligentcontrol.app;
 import com.skyworth.yunintelligentcontrol.config.AppDensityConfig;
 
 import android.app.Application;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 
 /**
@@ -26,6 +27,7 @@ import android.content.Context;
 public class App extends Application{
     public static Context mContext;
 
+    public  static BluetoothDevice mBluetoothDevice = null;
     @Override
     public void onCreate() {
         super.onCreate();

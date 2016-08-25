@@ -11,6 +11,7 @@
  */
 package com.skyworth.yunintelligentcontrol.utils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +26,13 @@ import android.app.Activity;
  */
 public class ActivityUtils {
 
-    public static List<Activity> activities = new ArrayList<Activity>();
+    public static List<WeakReference<Activity>> activities = new ArrayList<WeakReference<Activity>>();
 
     /**
      * 添加Activity
      */
     public static void addActivity(Activity activity) {
-        activities.add(activity);
+        activities.add(new WeakReference<Activity>(activity));
     }
 
     /**
@@ -45,9 +46,9 @@ public class ActivityUtils {
      * 清除所有Activity
      */
     public static void finishAll() {
-        for (Activity activity : activities) {
-            if (!activity.isFinishing()) {
-                activity.finish();
+        for (WeakReference<Activity> activity : activities) {
+            if (activity != null && activity.get() != null && !activity.get().isFinishing()) {
+                activity.get().finish();
             }
         }
     }

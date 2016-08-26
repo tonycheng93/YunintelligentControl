@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/air_cleaner_setting_background">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/air_cleaner_setting"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:background="@drawable/air_cleaner_setting_background">
+
     <TextView
-        android:text="@string/electric_fan_setting_health_mode"
-        android:textSize="@dimen/txt_big_large"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="40dp"
-        android:layout_marginBottom="50dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="80dp"
+        android:layout_marginLeft="80dp"
+        android:text="@string/electric_fan_setting_health_mode"
+        android:textSize="@dimen/txt_big_large"/>
 </LinearLayout>

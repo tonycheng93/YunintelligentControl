@@ -27,7 +27,7 @@ import android.content.Context;
 public class App extends Application{
     public static Context mContext;
 
-    public  static BluetoothDevice mBluetoothDevice = null;
+    //public  static BluetoothDevice mBluetoothDevice = null;
     @Override
     public void onCreate() {
         super.onCreate();

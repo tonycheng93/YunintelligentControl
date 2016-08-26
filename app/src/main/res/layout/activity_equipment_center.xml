@@ -74,6 +74,7 @@
         android:background="@drawable/equipment_center_grey"
         android:focusable="true"
         android:padding="20dp"
+        android:scaleType="center"
         android:src="@drawable/add_equipment_normal" />
 
 </LinearLayout>

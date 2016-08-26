@@ -110,7 +110,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
         mMode.setOnClickListener(this);
         mEquipmentCenter.setOnClickListener(this);
         rv_wheel.setOnKeyListener(this);
-        bluetoothDetection();
+    //    bluetoothDetection();
 
     }
 
@@ -194,29 +194,29 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
 
 
     // 检测蓝牙的连接状态
-    public void bluetoothDetection() {
-        mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = mBluetoothManager.getAdapter();
-        // 判断蓝牙是否打开
-        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(mBluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, 0);
-        }
-        // 获取已配对的蓝牙设备
-        Set<BluetoothDevice> pairdevice = mBluetoothAdapter.getBondedDevices();
-        if (pairdevice.size() > 0) {
-            for (BluetoothDevice device : pairdevice) {
-                if (device != null) {
-                    Log.i("1111111111", " " + device);
-                    App.mBluetoothDevice = device;
-                }
-            }
-        }
-//         获取GATT服务
-//         mBLEControl.getBluetoothGatt(HomeActivity.this,false);
-//         mBluetoothGatt = App.mBluetoothDevice .connectGatt(BLEControl.this, false,
-//         mCallback);
-
-    }
+//    public void bluetoothDetection() {
+//        mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+//        mBluetoothAdapter = mBluetoothManager.getAdapter();
+//        // 判断蓝牙是否打开
+//        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+//            Intent enableIntent = new Intent(mBluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableIntent, 0);
+//        }
+//        // 获取已配对的蓝牙设备
+//        Set<BluetoothDevice> pairdevice = mBluetoothAdapter.getBondedDevices();
+//        if (pairdevice.size() > 0) {
+//            for (BluetoothDevice device : pairdevice) {
+//                if (device != null) {
+//                    Log.i("1111111111", " " + device);
+//                    mBluetoothDevice = device;
+//                }
+//            }
+//        }
+////         获取GATT服务
+////         mBLEControl.getBluetoothGatt(HomeActivity.this,false);
+////         mBluetoothGatt = App.mBluetoothDevice .connectGatt(BLEControl.this, false,
+////         mCallback);
+//
+//    }
 
 }

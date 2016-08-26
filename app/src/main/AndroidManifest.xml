@@ -40,8 +40,6 @@
         <activity android:name=".activity.ElectricFanActivity"/>
         <activity android:name=".activity.EquipmentCenterActivity"/>
         <activity android:name=".activity.ElectricFanSettingActivity"/>
-        <activity android:name=".activity.FreezerActivity">
-        </activity>
         <activity android:name=".activity.FreezerSettingActivity">
         </activity>
         <activity android:name=".activity.BoxSettingActivity">

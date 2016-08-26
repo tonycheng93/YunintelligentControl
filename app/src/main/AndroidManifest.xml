@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
           package="com.skyworth.yunintelligentcontrol">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -47,6 +46,8 @@
         <activity android:name=".activity.AirCleanerSettingActivity">
         </activity>
         <activity android:name=".activity.AirConditionSettingActivity">
+        </activity>
+        <activity android:name=".activity.EquipManagmentCenterActivity">
         </activity>
     </application>
 

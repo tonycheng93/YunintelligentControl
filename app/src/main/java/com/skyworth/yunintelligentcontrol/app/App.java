@@ -16,6 +16,7 @@ import com.skyworth.yunintelligentcontrol.config.AppDensityConfig;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.support.v7.app.AppCompatDelegate;
 
 /**
  *
@@ -24,6 +25,7 @@ import android.content.Context;
  * @author: 包成
  * @date: 2016年8月12日 下午7:36:41
  */
+
 public class App extends Application{
     public static Context mContext;
 

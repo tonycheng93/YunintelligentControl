@@ -68,6 +68,8 @@ int test =0;
     private BluetoothGattCharacteristic mReadCharacteristic = null;
     private BluetoothDevice mBluetoothDevice = null;
 
+    //测试用
+    private int order[]={2,2,4,3};
     //回调
     private final BluetoothGattCallback mCallback = new BluetoothGattCallback() {
         //当Characteristic为可读态时回调
@@ -235,58 +237,58 @@ int test =0;
                     case R.id.equipment_setting_switch://风扇开关
                         setSettingText(mSwitch, switchTxt);
                         if (mSwitch.getText().toString() == "开") {
-                            datanum[0] = 2;
+                            datanum[0] = 128;
                             test = 2;
                         } else {
-                            datanum[0] = 1;
+                            datanum[0] = 0;
                             test =1;
                         }
                         break;
                     case R.id.equipment_setting_air_volume://风量
                         setSettingText(mAirVolume, airVolume);
                         test = 2;
-//                        switch (mAirVolume.getText().toString()) {
-//                           // test =2;
-//                            case "低":
-//                                datanum[1] = 2;
-//                                break;
-//                            case "中":
-//                                datanum[1] = 2;
-//                                break;
-//                            case "高":
-//                                datanum[1] = 2;
-//                                break;
-//                        }
+                        switch (mAirVolume.getText().toString()) {
+                           // test =2;
+                            case "低":
+                                datanum[1] = 0;
+                                break;
+                            case "中":
+                                datanum[1] = 32;
+                                break;
+                            case "高":
+                                datanum[1] = 64;
+                                break;
+                        }
                         break;
                     case R.id.equipment_setting_air_direction://风向
                         setSettingText(mAirDirection, airDirection);
                         test = 4;
-//                        switch (mAirDirection.getText().toString()) {
-//                            case "固定":
-//                                datanum[2] = 4;
-//                                break;
-//                            case "摆动":
-//                                datanum[2] = 4;
-//                                break;
-//                        }
+                        switch (mAirDirection.getText().toString()) {
+                            case "固定":
+                                datanum[2] =0;
+                                break;
+                            case "摆动":
+                                datanum[2] =16;
+                                break;
+                        }
                         break;
                     case R.id.equipment_setting_time://定时
                         setSettingText(mTime, time);
                         test = 3;
-//                        switch (mTime.getText().toString()) {
-//                            case "关":
-//                                datanum[3] = 3;
-//                                break;
-//                            case "1H":
-//                                datanum[3] = 3;
-//                                break;
-//                            case "2H":
-//                                datanum[3] = 3;
-//                                break;
-//                            case "3H":
-//                                datanum[3] = 3;
-//                                break;
-//                        }
+                        switch (mTime.getText().toString()) {
+                            case "关":
+                                datanum[3] = 0;
+                                break;
+                            case "1H":
+                                datanum[3] = 4;
+                                break;
+                            case "2H":
+                                datanum[3] = 8;
+                                break;
+                            case "3H":
+                                datanum[3] = 12;
+                                break;
+                        }
                         break;
                     default:
                         break;
@@ -299,66 +301,66 @@ int test =0;
                         setSettingText(mSwitch, switchTxt);
                         if (mSwitch.getText().toString() == "开") {
                             test = 2;
-                            datanum[0] = 2;
+                            datanum[0] = 128;
                         } else {
                             test = 1;
-                            datanum[0] = 1;
+                            datanum[0] = 0;
                         }
                         break;
                     case R.id.equipment_setting_air_volume:
                         setSettingText(mAirVolume, airVolume);
                             test = 2;
-//                        switch (mAirVolume.getText().toString()) {
-//                            case "低":
-//
-//                                datanum[1] = 2;
-//                                break;
-//                            case "中":
-//
-//                                datanum[1] = 2;
-//                                break;
-//                            case "高":
-//
-//                                datanum[1] = 2;
-//                                break;
-//                        }
+                        switch (mAirVolume.getText().toString()) {
+                            case "低":
+
+                                datanum[1] = 0;
+                                break;
+                            case "中":
+
+                                datanum[1] = 32;
+                                break;
+                            case "高":
+
+                                datanum[1] = 64;
+                                break;
+                        }
                         break;
                     case R.id.equipment_setting_air_direction:
                         setSettingText(mAirDirection, airDirection);
                         test = 4;
-//                        switch (mAirDirection.getText().toString()) {
-//                            case "固定":
-//
-//                                datanum[2] = 4;
-//                                break;
-//                            case "摆动":
-//
-//                                datanum[2] = 4;
-//                                break;
-//                        }
+                        switch (mAirDirection.getText().toString()) {
+                            case "固定":
+
+                                datanum[2] = 0;
+                                break;
+                            case "摆动":
+
+                                datanum[2] = 16;
+                                break;
+                        }
                         break;
                     case R.id.equipment_setting_time:
                         setSettingText(mTime, time);
                         Settings[3] = mTime.getText().toString();
                         test = 3;
-//                        switch (mTime.getText().toString()) {
-//                            case "关":
-//
-//                                datanum[3] = 3;
-//                                break;
-//                            case "1H":
-//
-//                                datanum[3] = 3;
-//                                break;
-//                            case "2H":
-//
-//                                datanum[3] = 3;
-//                                break;
-//                            case "3H":
-//
-//                                datanum[3] = 3;
-//                                break;
-//                        }
+                        switch (mTime.getText().toString()) {
+                            case "关":
+
+                                datanum[3] = 0;
+                                break;
+                            case "1H":
+
+                                datanum[3] = 4;
+                                break;
+                            case "2H":
+
+                                datanum[3] = 8;
+                                break;
+                            case "3H":
+
+                                datanum[3] = 12;
+                                break;
+                        }
                         break;
                     default:
                         break;
@@ -367,20 +369,33 @@ int test =0;
                 //		mBleControl.sendData(SharedPreferencesUtils.getString("0x4F").getBytes());
             }
         }
-    //    new SendListener().start();
+     new SendListener().start();
         return false;
     }
 
     private class SendListener extends Thread {
         @Override
         public void run() {
-//            for (int i = 0; i < 4; i++) {
-//                Data += datanum[i];
-//            }
-             Log.i(BLE+"1111111111111",test+"");
-            sendData(test);
+            for(int i = 0; i <4; i++){
+                Data+=datanum[i];
+            }
 
             try {
+
+                if(_health_mode){
+                    Log.i(BLE+"1111111111111", "180");
+                    for(int i = 0; i < order.length;i++)
+                    {
+                        Log.i(BLE+"1111111111111", order[i]+"");
+                        sendData(order[i]);
+                        Thread.sleep(1000);
+                    }
+
+                   // sendData(180);
+                }else {
+                    Log.i(BLE+"1111111111111",test+"");
+                    sendData(test);
+                }
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -391,6 +406,9 @@ int test =0;
 
     @Override
     public void onClick(View view) {
+        if(_health_mode) {
+            new SendListener().start();
+        }
         Intent2Activity(HomeActivity.class);
     }
 

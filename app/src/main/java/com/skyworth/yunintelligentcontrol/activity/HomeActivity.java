@@ -11,13 +11,9 @@
  */
 package com.skyworth.yunintelligentcontrol.activity;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,15 +21,16 @@ import android.widget.ImageView;
 
 import com.skyworth.yunintelligentcontrol.R;
 import com.skyworth.yunintelligentcontrol.activity.base.BaseActivity;
-import com.skyworth.yunintelligentcontrol.app.App;
+import com.skyworth.yunintelligentcontrol.utils.ActivityUtils;
 import com.skyworth.yunintelligentcontrol.utils.LogUtils;
+import com.skyworth.yunintelligentcontrol.utils.NightModeUtils;
+import com.skyworth.yunintelligentcontrol.utils.SharedPreferencesUtils;
 import com.skyworth.yunintelligentcontrol.view.recyclewheelview.ImageWheelAdapter;
 import com.skyworth.yunintelligentcontrol.view.recyclewheelview.RecycleWheelView;
 import com.skyworth.yunintelligentcontrol.view.recyclewheelview.RecycleWheelView.OnSelectItemListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @ClassName: HomeActivity
@@ -43,15 +40,13 @@ import java.util.Set;
  */
 public class HomeActivity extends BaseActivity implements OnClickListener, View.OnKeyListener {
 
-    private ImageView mMode;// 白天or夜晚模式
+    private ImageView mNight;//夜晚模式
+    private ImageView mDayTime;// 白天模式
+    private boolean mNightIsShown;//夜晚模式是否可见（默认可见）
     private ImageView mEquipmentCenter;// 设备管理中心
 
     private RecycleWheelView rv_wheel;
     private ImageWheelAdapter<Integer> mAdapter;
-
-    //与蓝牙有关的操作
-    private BluetoothAdapter mBluetoothAdapter = null;
-    private BluetoothManager mBluetoothManager = null;
 
     /*具体进入哪个设备的标志*/
     public static final String BOX_FLAG = "box";
@@ -64,8 +59,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -75,7 +68,8 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
 
     @Override
     public void findViews() {
-        mMode = (ImageView) findViewById(R.id.night);
+        mDayTime = (ImageView) findViewById(R.id.daytime);
+        mNight = (ImageView) findViewById(R.id.night);
         mEquipmentCenter = (ImageView) findViewById(R.id.equipment_management_center);
 
         mAdapter = new ImageWheelAdapter<>(this);
@@ -99,7 +93,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
         dataList.add(R.drawable.freezer_focus);
         dataList.add(R.drawable.air_cleaner_focus);
         mAdapter.setData(dataList);
-        rv_wheel.scrollToPosition(2);
     }
 
     @Override
@@ -107,16 +100,24 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
 
         rv_wheel.requestFocus();
 
-        mMode.setOnClickListener(this);
+        mNightIsShown = SharedPreferencesUtils.getBoolean("night_mode");
+        if (mNightIsShown){
+            mNight.setVisibility(View.VISIBLE);
+            mDayTime.setVisibility(View.GONE);
+        }else {
+            mNight.setVisibility(View.GONE);
+            mDayTime.setVisibility(View.VISIBLE);
+        }
+
+        mDayTime.setOnClickListener(this);
+        mNight.setOnClickListener(this);
         mEquipmentCenter.setOnClickListener(this);
         rv_wheel.setOnKeyListener(this);
-    //    bluetoothDetection();
 
     }
 
     @Override
     public void getData() {
-        Intent data = getIntent();
     }
 
     @Override
@@ -131,25 +132,29 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
                     break;
                 case KeyEvent.KEYCODE_DPAD_CENTER:
                     if (rv_wheel.getSelectPosition() == 0) {
-                        Intent2Activity(BOX_FLAG,ElectricFanActivity.class);
+                        Intent2Activity(BOX_FLAG, ElectricFanActivity.class);
                     } else if (rv_wheel.getSelectPosition() == 1) {
-                        Intent2Activity(AIR_CONDITION_FLAG,ElectricFanActivity.class);
+                        Intent2Activity(AIR_CONDITION_FLAG, ElectricFanActivity.class);
                     } else if (rv_wheel.getSelectPosition() == 2) {
-                        Intent2Activity(ELECTRIC_FAN_FLAG,ElectricFanActivity.class);
+                        Intent2Activity(ELECTRIC_FAN_FLAG, ElectricFanActivity.class);
                     } else if (rv_wheel.getSelectPosition() == 3) {
-                        Intent2Activity(FREEZER_FLAG,ElectricFanActivity.class);
+                        Intent2Activity(FREEZER_FLAG, ElectricFanActivity.class);
                     } else if (rv_wheel.getSelectPosition() == 4) {
-                        Intent2Activity(AIR_CLEANER_FLAG,ElectricFanActivity.class);
+                        Intent2Activity(AIR_CLEANER_FLAG, ElectricFanActivity.class);
                     }
                     break;
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (view == rv_wheel) {
-                        mMode.requestFocus();
+                        if (mNight.isShown()) {
+                            mNight.requestFocus();
+                        } else {
+                            mDayTime.requestFocus();
+                        }
                         return true;
                     }
                     return true;
                 case KeyEvent.KEYCODE_DPAD_DOWN:
-                    if (view == mMode || view == mEquipmentCenter) {
+                    if (view == mNight || view == mEquipmentCenter || view == mDayTime) {
                         rv_wheel.requestFocus();
                         return true;
                     }
@@ -182,7 +187,22 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.night:
-                // TODO 跳转到夜晚模式
+                if (mNight.isShown()) {
+                    mNight.setVisibility(View.GONE);
+                    mDayTime.setVisibility(View.VISIBLE);
+                    SharedPreferencesUtils.putBoolean("night_mode",false);
+                    mDayTime.requestFocus();
+                    NightModeUtils.changeToNightMode(HomeActivity.this);
+                }
+                break;
+            case R.id.daytime:
+                if (mDayTime.isShown()) {
+                    mNight.setVisibility(View.VISIBLE);
+                    mDayTime.setVisibility(View.GONE);
+                    SharedPreferencesUtils.putBoolean("night_mode",true);
+                    mNight.requestFocus();
+                    NightModeUtils.changeToDayMode(HomeActivity.this);
+                }
                 break;
             case R.id.equipment_management_center:
                 Intent2Activity(EquipmentCenterActivity.class);
@@ -191,6 +211,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
                 break;
         }
     }
+
 
 
     // 检测蓝牙的连接状态
@@ -219,4 +240,9 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
 //
 //    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ActivityUtils.finishAll();
+    }
 }

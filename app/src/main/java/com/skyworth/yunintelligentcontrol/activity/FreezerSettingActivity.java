@@ -18,7 +18,7 @@ public class FreezerSettingActivity extends BaseActivity {
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.activity_freezer);
+        setContentView(R.layout.activity_freezer_setting);
 
     }
 

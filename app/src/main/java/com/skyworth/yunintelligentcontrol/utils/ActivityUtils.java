@@ -32,7 +32,7 @@ public class ActivityUtils {
      * 添加Activity
      */
     public static void addActivity(Activity activity) {
-        activities.add(new WeakReference<Activity>(activity));
+        activities.add(new WeakReference<>(activity));
     }
 
     /**

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/equipment_managment_center_background"
+    tools:context=".activity.EquipManagmentCenterActivity">
+
+    <LinearLayout
+        android:id="@+id/equipment_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="80dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/electric_fan_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/equipment_brand_button_selector"
+            android:focusable="true"
+            android:text="@string/electric_fan_channel_txt"
+            android:textSize="@dimen/txt_large"/>
+
+        <Button
+            android:id="@+id/freezer_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/equipment_brand_button_selector"
+            android:focusable="true"
+            android:text="@string/freezer_channel_txt"
+            android:textSize="@dimen/txt_large"/>
+
+        <Button
+            android:id="@+id/air_condition_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:background="@drawable/equipment_brand_button_selector"
+            android:text="@string/air_condition_channel_txt"
+            android:textSize="@dimen/txt_large"/>
+
+        <Button
+            android:id="@+id/air_cleaner_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:background="@drawable/equipment_brand_button_selector"
+            android:text="@string/air_cleaner_channel_txt"
+            android:textSize="@dimen/txt_large"/>
+
+        <Button
+            android:id="@+id/box_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:background="@drawable/equipment_brand_button_selector"
+            android:text="@string/box_channel_txt"
+            android:textSize="@dimen/txt_large"/>
+
+        <Button
+            android:id="@+id/more_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/equipment_managment_center_point"
+            android:focusable="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_background"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/equipment_container"
+        android:layout_weight="4"
+        android:background="@drawable/electric_fan_brand_choice">
+    </LinearLayout>
+</LinearLayout>

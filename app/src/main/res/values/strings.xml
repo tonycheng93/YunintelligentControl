@@ -39,4 +39,11 @@
     <string name="air_condition_setting_model_txt">模式</string>
     <string name="air_condition_setting_temp">温度</string>
 
+    <!--设备管理中心添加设备-->
+    <string name="electric_fan_channel_txt">电风扇</string>
+    <string name="freezer_channel_txt">冰箱</string>
+    <string name="air_condition_channel_txt">空调</string>
+    <string name="air_cleaner_channel_txt">空气净化器</string>
+    <string name="box_channel_txt">机顶盒</string>
+
 </resources>

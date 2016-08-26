@@ -56,4 +56,14 @@ public class SharedPreferencesUtils {
     public static void removeString(String key) {
         getPreferences().edit().remove(key).commit();
     }
+
+    //保存布尔值
+    public static void putBoolean(String key,boolean value){
+        getPreferences().edit().putBoolean(key,value).commit();
+    }
+
+    //读取布尔值
+    public static boolean getBoolean(String key){
+        return getPreferences().getBoolean(key,true);
+    }
 }

@@ -19,7 +19,8 @@
             android:layout_width="180dp"
             android:layout_height="160dp"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/electric_fan_center_selector"
+            android:background="@drawable/equipment_center_frame_background"
+            android:src="@drawable/electric_fan_center_focus"
             android:focusable="true" />
 
         <ImageView
@@ -28,40 +29,36 @@
             android:layout_height="160dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="60dp"
-            android:background="@drawable/equipment_center_grey"
+            android:background="@drawable/equipment_center_frame_background"
             android:focusable="true"
-            android:scaleType="center"
-            android:src="@drawable/freezer_center_normal" />
+            android:src="@drawable/freezer_center_selector" />
 
         <ImageView
             android:id="@+id/air_condition_center"
             android:layout_width="180dp"
             android:layout_height="160dp"
             android:layout_marginStart="60dp"
-            android:background="@drawable/equipment_center_grey"
+            android:background="@drawable/equipment_center_frame_background"
             android:focusable="true"
-            android:scaleType="center"
-            android:src="@drawable/air_condition_center_normal" />
+            android:src="@drawable/air_condition_center_selector" />
 
         <ImageView
             android:id="@+id/box_center"
             android:layout_width="180dp"
             android:layout_height="160dp"
             android:layout_marginStart="60dp"
-            android:background="@drawable/equipment_center_grey"
+            android:background="@drawable/equipment_center_frame_background"
             android:focusable="true"
-            android:scaleType="center"
-            android:src="@drawable/box_center_normal" />
+            android:src="@drawable/box_center_selector" />
 
         <ImageView
             android:id="@+id/air_cleaner_center"
             android:layout_width="180dp"
             android:layout_height="160dp"
             android:layout_marginStart="60dp"
-            android:background="@drawable/equipment_center_grey"
+            android:background="@drawable/equipment_center_frame_background"
             android:focusable="true"
-            android:scaleType="center"
-            android:src="@drawable/air_cleaner_center_normal" />
+            android:src="@drawable/air_cleaner_center_selector" />
     </LinearLayout>
 
     <ImageView
@@ -71,10 +68,9 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="60dp"
         android:layout_marginTop="40dp"
-        android:background="@drawable/equipment_center_grey"
+        android:background="@drawable/equipment_center_frame_background"
         android:focusable="true"
         android:padding="20dp"
-        android:scaleType="center"
-        android:src="@drawable/add_equipment_normal" />
+        android:src="@drawable/add_equipment_selector" />
 
 </LinearLayout>

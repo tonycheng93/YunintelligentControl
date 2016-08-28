@@ -13,21 +13,21 @@ package com.skyworth.yunintelligentcontrol.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
+import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.skyworth.yunintelligentcontrol.R;
 import com.skyworth.yunintelligentcontrol.activity.base.BaseActivity;
+import com.skyworth.yunintelligentcontrol.config.Constant;
 import com.skyworth.yunintelligentcontrol.utils.ActivityUtils;
 import com.skyworth.yunintelligentcontrol.utils.LogUtils;
 import com.skyworth.yunintelligentcontrol.utils.NightModeUtils;
 import com.skyworth.yunintelligentcontrol.utils.SharedPreferencesUtils;
-import com.skyworth.yunintelligentcontrol.view.recyclewheelview.ImageWheelAdapter;
-import com.skyworth.yunintelligentcontrol.view.recyclewheelview.RecycleWheelView;
-import com.skyworth.yunintelligentcontrol.view.recyclewheelview.RecycleWheelView.OnSelectItemListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +45,14 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
     private boolean mNightIsShown;//夜晚模式是否可见（默认可见）
     private ImageView mEquipmentCenter;// 设备管理中心
 
-    private RecycleWheelView rv_wheel;
-    private ImageWheelAdapter<Integer> mAdapter;
+    private ImageView mIvHomeBackground;
+
+    private FrameLayout mDayOrNightSwitch;
+    private String parm;
+
+
+//    private RecycleWheelView rv_wheel;
+//    private ImageWheelAdapter<Integer> mAdapter;
 
     /*具体进入哪个设备的标志*/
     public static final String BOX_FLAG = "box";
@@ -54,6 +60,10 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
     public static final String ELECTRIC_FAN_FLAG = "electric_fan";
     public static final String FREEZER_FLAG = "freezer";
     public static final String AIR_CLEANER_FLAG = "air_cleaner";
+
+
+    private List<Integer> resId = new ArrayList<>();
+    private Handler mHandler = new Handler();
 
 
     @Override
@@ -71,116 +81,170 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
         mDayTime = (ImageView) findViewById(R.id.daytime);
         mNight = (ImageView) findViewById(R.id.night);
         mEquipmentCenter = (ImageView) findViewById(R.id.equipment_management_center);
+        mIvHomeBackground = (ImageView) findViewById(R.id.iv_home_background);
+        mDayOrNightSwitch = (FrameLayout) findViewById(R.id.day_or_night_switch);
 
-        mAdapter = new ImageWheelAdapter<>(this);
-        rv_wheel = (RecycleWheelView) findViewById(R.id.rv_wheel);
-        rv_wheel.setOnSelectListener(new OnSelectItemListener() {
 
-            @Override
-            public void onSelectChanged(int position) {
-
-            }
-        });
-        setupWheel();
+//        mAdapter = new ImageWheelAdapter<>(this);
+//        rv_wheel = (RecycleWheelView) findViewById(R.id.rv_wheel);
+//        rv_wheel.setOnSelectListener(new OnSelectItemListener() {
+//
+//            @Override
+//            public void onSelectChanged(int position) {
+//
+//            }
+//        });
+//        setupWheel();
     }
 
-    private void setupWheel() {
-        rv_wheel.setAdapter(mAdapter);
-        List<Integer> dataList = new ArrayList<>();
-        dataList.add(R.drawable.box_focus);
-        dataList.add(R.drawable.air_condition_focus);
-        dataList.add(R.drawable.electric_fan_focus);
-        dataList.add(R.drawable.freezer_focus);
-        dataList.add(R.drawable.air_cleaner_focus);
-        mAdapter.setData(dataList);
-    }
+//    private void setupWheel() {
+//        rv_wheel.setAdapter(mAdapter);
+//        List<Integer> dataList = new ArrayList<>();
+//        dataList.add(R.drawable.box_focus);
+//        dataList.add(R.drawable.air_condition_focus);
+//        dataList.add(R.drawable.electric_fan_focus);
+//        dataList.add(R.drawable.freezer_focus);
+//        dataList.add(R.drawable.air_cleaner_focus);
+//        mAdapter.setData(dataList);
+//    }
 
     @Override
     public void initView() {
 
-        rv_wheel.requestFocus();
+        resId.add(R.drawable.electric_fan_home_focus);
+        resId.add(R.drawable.freezer_home_focus);
+        resId.add(R.drawable.air_cleaner_home_focus);
+        resId.add(R.drawable.box_home_focus);
+        resId.add(R.drawable.air_condition_home_focus);
+        resId.add(R.drawable.electric_fan_home_focus);
+        resId.add(R.drawable.freezer_home_focus);
+        resId.add(R.drawable.air_cleaner_home_focus);
+        resId.add(R.drawable.box_home_focus);
+        resId.add(R.drawable.air_condition_home_focus);
 
-        mNightIsShown = SharedPreferencesUtils.getBoolean("night_mode");
-        if (mNightIsShown){
-            mNight.setVisibility(View.VISIBLE);
-            mDayTime.setVisibility(View.GONE);
+        if ( parm != null && parm.equalsIgnoreCase(ElectricFanSettingActivity.ELECTRIC_FAN_FLAG)){
+            mIvHomeBackground.setBackgroundResource(R.drawable.electric_fan_home_with_parm_focus);
         }else {
-            mNight.setVisibility(View.GONE);
-            mDayTime.setVisibility(View.VISIBLE);
+
+//        rv_wheel.requestFocus();
+            mIvHomeBackground.requestFocus();
+
+            mNightIsShown = SharedPreferencesUtils.getBoolean("night_mode");
+            if (mNightIsShown) {
+                mNight.setVisibility(View.VISIBLE);
+                mDayTime.setVisibility(View.GONE);
+            } else {
+                mNight.setVisibility(View.GONE);
+                mDayTime.setVisibility(View.VISIBLE);
+            }
+
+            mDayTime.setOnClickListener(this);
+            mNight.setOnClickListener(this);
+            mEquipmentCenter.setOnClickListener(this);
+//        rv_wheel.setOnKeyListener(this);
+            mIvHomeBackground.setOnKeyListener(this);
         }
 
-        mDayTime.setOnClickListener(this);
-        mNight.setOnClickListener(this);
-        mEquipmentCenter.setOnClickListener(this);
-        rv_wheel.setOnKeyListener(this);
+
 
     }
 
     @Override
     public void getData() {
-    }
-
-    @Override
-    public boolean onKey(View view, int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            LogUtils.d("test", "onKeyDown : " + keyCode);
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_DPAD_LEFT:
-                case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    if (view == rv_wheel)
-                        return changeRecyclePos(keyCode);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_CENTER:
-                    if (rv_wheel.getSelectPosition() == 0) {
-                        Intent2Activity(BOX_FLAG, ElectricFanActivity.class);
-                    } else if (rv_wheel.getSelectPosition() == 1) {
-                        Intent2Activity(AIR_CONDITION_FLAG, ElectricFanActivity.class);
-                    } else if (rv_wheel.getSelectPosition() == 2) {
-                        Intent2Activity(ELECTRIC_FAN_FLAG, ElectricFanActivity.class);
-                    } else if (rv_wheel.getSelectPosition() == 3) {
-                        Intent2Activity(FREEZER_FLAG, ElectricFanActivity.class);
-                    } else if (rv_wheel.getSelectPosition() == 4) {
-                        Intent2Activity(AIR_CLEANER_FLAG, ElectricFanActivity.class);
-                    }
-                    break;
-                case KeyEvent.KEYCODE_DPAD_UP:
-                    if (view == rv_wheel) {
-                        if (mNight.isShown()) {
-                            mNight.requestFocus();
-                        } else {
-                            mDayTime.requestFocus();
-                        }
-                        return true;
-                    }
-                    return true;
-                case KeyEvent.KEYCODE_DPAD_DOWN:
-                    if (view == mNight || view == mEquipmentCenter || view == mDayTime) {
-                        rv_wheel.requestFocus();
-                        return true;
-                    }
-                    return true;
-            }
+        Intent data = getIntent();
+        if (data != null){
+            parm = data.getStringExtra(Constant.EXTRA_NAME);
+        }else {
+            parm = null;
         }
-        return false;
     }
 
-    private boolean changeRecyclePos(int keyCode) {
-        int pos = rv_wheel.getSelectPosition();
-        int count = rv_wheel.getAdapter().getItemCount();
-        LogUtils.d("test", "pos=" + pos + ", count=" + count);
+//    @Override
+//    public boolean onKey(View view, int keyCode, KeyEvent event) {
+//        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//            LogUtils.d("test", "onKeyDown : " + keyCode);
+//            switch (keyCode) {
+//                case KeyEvent.KEYCODE_DPAD_LEFT:
+//                case KeyEvent.KEYCODE_DPAD_RIGHT:
+//                    if (view == rv_wheel)
+//                        return changeRecyclePos(keyCode);
+//                    break;
+//                case KeyEvent.KEYCODE_DPAD_CENTER:
+//                case KeyEvent.KEYCODE_ENTER:
+//                    if (rv_wheel.getSelectPosition() == 0) {
+//                        Intent2Activity(BOX_FLAG, ElectricFanActivity.class);
+//                    } else if (rv_wheel.getSelectPosition() == 1) {
+//                        Intent2Activity(AIR_CONDITION_FLAG, ElectricFanActivity.class);
+//                    } else if (rv_wheel.getSelectPosition() == 2) {
+//                        Intent2Activity(ELECTRIC_FAN_FLAG, ElectricFanActivity.class);
+//                    } else if (rv_wheel.getSelectPosition() == 3) {
+//                        Intent2Activity(FREEZER_FLAG, ElectricFanActivity.class);
+//                    } else if (rv_wheel.getSelectPosition() == 4) {
+//                        Intent2Activity(AIR_CLEANER_FLAG, ElectricFanActivity.class);
+//                    }
+//                    break;
+//                case KeyEvent.KEYCODE_DPAD_UP:
+//                    if (view == rv_wheel) {
+//                        if (mNight.isShown()) {
+//                            mNight.requestFocus();
+//                        } else {
+//                            mDayTime.requestFocus();
+//                        }
+//                        return true;
+//                    }
+//                    return true;
+//                case KeyEvent.KEYCODE_DPAD_DOWN:
+//                    if (view == mNight || view == mEquipmentCenter || view == mDayTime) {
+//                        rv_wheel.requestFocus();
+//                        return true;
+//                    }
+//                    return true;
+//            }
+//        }
+//        return false;
+//    }
+
+//    private boolean changeRecyclePos(int keyCode) {
+//        int pos = rv_wheel.getSelectPosition();
+//        int count = rv_wheel.getAdapter().getItemCount();
+//        LogUtils.d("test", "pos=" + pos + ", count=" + count);
+//        switch (keyCode) {
+//            case KeyEvent.KEYCODE_DPAD_LEFT:
+//                if (pos > 0)
+//                    pos--;
+//                rv_wheel.smoothScrollToPosition(pos);
+//                return true;
+//            case KeyEvent.KEYCODE_DPAD_RIGHT:
+//                if (pos < count - 1)
+//                    pos++;
+//                rv_wheel.smoothScrollToPosition(pos);
+//                return true;
+//        }
+//        return false;
+//    }
+
+    private int position = 0;
+
+    private void changeBackground(int keyCode) {
         switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                if (pos > 0)
-                    pos--;
-                rv_wheel.smoothScrollToPosition(pos);
-                return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                if (pos < count - 1)
-                    pos++;
-                rv_wheel.smoothScrollToPosition(pos);
-                return true;
+                if (position < resId.size() - 1) {
+                    position++;
+                }
+                LogUtils.d("TAG", "position = " + position);
+                mIvHomeBackground.setBackgroundResource(resId.get(position));
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                if (position > 0) {
+                    position --;
+
+                }
+                LogUtils.d("TAG", "position = " + position);
+                mIvHomeBackground.setBackgroundResource(resId.get(position));
+                break;
+            default:
+                break;
         }
-        return false;
     }
 
     @Override
@@ -190,18 +254,41 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
                 if (mNight.isShown()) {
                     mNight.setVisibility(View.GONE);
                     mDayTime.setVisibility(View.VISIBLE);
-                    SharedPreferencesUtils.putBoolean("night_mode",false);
+                    SharedPreferencesUtils.putBoolean("night_mode", false);
                     mDayTime.requestFocus();
-                    NightModeUtils.changeToNightMode(HomeActivity.this);
+                    mDayOrNightSwitch.setVisibility(View.VISIBLE);
+                    mDayOrNightSwitch.setBackgroundResource(R.drawable.day_to_night);
+                    mNight.setVisibility(View.INVISIBLE);
+                    mDayTime.setVisibility(View.INVISIBLE);
+                    mEquipmentCenter.setVisibility(View.INVISIBLE);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            NightModeUtils.changeToNightMode(HomeActivity.this);
+                            mDayOrNightSwitch.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1000);
+
                 }
                 break;
             case R.id.daytime:
                 if (mDayTime.isShown()) {
                     mNight.setVisibility(View.VISIBLE);
                     mDayTime.setVisibility(View.GONE);
-                    SharedPreferencesUtils.putBoolean("night_mode",true);
+                    SharedPreferencesUtils.putBoolean("night_mode", true);
                     mNight.requestFocus();
-                    NightModeUtils.changeToDayMode(HomeActivity.this);
+                    mDayOrNightSwitch.setVisibility(View.VISIBLE);
+                    mDayOrNightSwitch.setBackgroundResource(R.drawable.night_to_day);
+                    mNight.setVisibility(View.INVISIBLE);
+                    mDayTime.setVisibility(View.INVISIBLE);
+                    mEquipmentCenter.setVisibility(View.INVISIBLE);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            NightModeUtils.changeToDayMode(HomeActivity.this);
+                            mDayOrNightSwitch.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1000);
                 }
                 break;
             case R.id.equipment_management_center:
@@ -211,7 +298,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
                 break;
         }
     }
-
 
 
     // 检测蓝牙的连接状态
@@ -244,5 +330,55 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
     public void onBackPressed() {
         super.onBackPressed();
         ActivityUtils.finishAll();
+    }
+
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_DPAD_CENTER:
+                case KeyEvent.KEYCODE_ENTER:
+                    if (resId.get(position) == R.drawable.electric_fan_home_focus){
+                        Intent2Activity(ELECTRIC_FAN_FLAG,ElectricFanActivity.class);
+                    }else if (resId.get(position) == R.drawable.freezer_home_focus){
+                        Intent2Activity(FREEZER_FLAG,ElectricFanActivity.class);
+                    }else if (resId.get(position) == R.drawable.air_cleaner_home_focus ){
+                        Intent2Activity(AIR_CLEANER_FLAG,ElectricFanActivity.class);
+                    }else if (resId.get(position) == R.drawable.box_home_focus){
+                        Intent2Activity(BOX_FLAG,ElectricFanActivity.class);
+                    }else if (resId.get(position) == R.drawable.air_condition_home_focus){
+                        Intent2Activity(AIR_CONDITION_FLAG, ElectricFanActivity.class);
+                    }
+                    break;
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    changeBackground(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    changeBackground(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    Log.i("BBLLEE1111111111111", "UP");
+                    if (view == mIvHomeBackground) {
+                        if (mNight.isShown()) {
+                            mNight.requestFocus();
+                        } else {
+                            mDayTime.requestFocus();
+                        }
+                    }
+                    break;
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    Log.i("BBLLEE1111111111111", "down");
+                    if (view == mNight || view == mEquipmentCenter || view == mDayTime) {
+                        mIvHomeBackground.requestFocus();
+                    } else {
+                        Log.i("BBLLEE1111111111111", "tiaojian");
+                    }
+                    break;
+                default:
+                    LogUtils.d("11111111111", "keycode = " + keyCode);
+                    break;
+            }
+        }
+        return false;
     }
 }

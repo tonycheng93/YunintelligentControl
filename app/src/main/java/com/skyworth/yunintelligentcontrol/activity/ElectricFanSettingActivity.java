@@ -11,19 +11,22 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.media.RatingCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.skyworth.yunintelligentcontrol.R;
 import com.skyworth.yunintelligentcontrol.activity.base.BaseActivity;
-import com.skyworth.yunintelligentcontrol.app.App;
 import com.skyworth.yunintelligentcontrol.utils.LogUtils;
 
 import java.util.Set;
@@ -38,12 +41,17 @@ public class ElectricFanSettingActivity extends BaseActivity implements OnKeyLis
     private TextView mTime;
     private TextView mHealthMode;
     private Button mConfirm;
-int test =0;
+    private ImageView mFrameAnim;
+    int test = 0;
 
-    private String switchTxt[] = {"关", "开"};
-    private String airVolume[] = {"低", "中", "高"};
-    private String airDirection[] = {"固定", "摆动"};
-    private String time[] = {"关", "1H", "2H", "3H"};
+    public static final String ELECTRIC_FAN_FLAG = "electric_fan_setting";
+
+    private String switchTxt[] = {"开", "关"};
+    private String airVolume[] = {"中", "高", "低"};
+    private String airDirection[] = {"摆动", "固定"};
+    private String time[] = {"1H", "2H", "3H", "关"};
+
+    private AnimationDrawable animationDrawable;
 
     /*健康模式默认参数设置*/
     private boolean _health_mode;
@@ -69,7 +77,11 @@ int test =0;
     private BluetoothDevice mBluetoothDevice = null;
 
     //测试用
-    private int order[]={2,2,4,3};
+    private int order[] = {2, 2 , 4, 3};
+    int a = 0;
+    int b = 0;
+    int c = 0;
+    int d = 0;
     //回调
     private final BluetoothGattCallback mCallback = new BluetoothGattCallback() {
         //当Characteristic为可读态时回调
@@ -113,31 +125,33 @@ int test =0;
 
         //连接状态发生更在时调用
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-           Log.i(BLE+"111111","COME IN ONCONNECTIONSTATATECHANGE"+status);
+            Log.i(BLE + "111111", "COME IN ONCONNECTIONSTATATECHANGE" + status);
             if (gatt.GATT_SUCCESS == status) {
-                Log.i(BLE+"111111","  cone in if");
+                Log.i(BLE + "111111", "  cone in if");
                 boolean is = mBluetoothGatt.discoverServices();
             } else if (newState == BluetoothGatt.GATT_FAILURE) {
             }
-        };
+        }
+
+        ;
 
         //远端设备中的服务可用时回调
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            Log.i(BLE+"111111","COME IN onServicesDiscovered");
+            Log.i(BLE + "111111", "COME IN onServicesDiscovered");
             if (status == gatt.GATT_SUCCESS) {
                 BluetoothGattService mWriteService = mBluetoothGatt.getService(SERVICE_WRITE_UUID);
 
                 if (mWriteService != null) {
-                    Log.i(BLE+"11111111111","mWriteService is not null!");
+                    Log.i(BLE + "11111111111", "mWriteService is not null!");
                     mWriteCharacteristic = mWriteService.getCharacteristic(CHARACTER_WRITE_UUID);
-                    Log.i(BLE+"1111111111回调",""+mWriteCharacteristic);
+                    Log.i(BLE + "1111111111回调", "" + mWriteCharacteristic);
                 } else {
                     Log.i(BLE + "1111111111", " mWriterCharaccteristic is null");
                 }
             } else {
             }
             Log.i(BLE + "11111111111:servicesize", gatt.getServices().size() + "");
-          //  super.onServicesDiscovered(gatt, status);
+            //  super.onServicesDiscovered(gatt, status);
         }
 
         ;
@@ -146,7 +160,6 @@ int test =0;
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             ReadCharacterValue(characteristic);
         }
-
 
 
     };
@@ -164,15 +177,16 @@ int test =0;
 
     //发送数据
     public void sendData(int data) {
-        if(mWriteCharacteristic == null){
-            Log.i(BLE+"1111111111111","mWriteCharacteristic is null");
-        }
-       else if(mWriteCharacteristic.setValue(data, BluetoothGattCharacteristic.FORMAT_UINT8, 0)
-                && mBluetoothGatt.writeCharacteristic(mWriteCharacteristic)){
+        if (mWriteCharacteristic == null) {
+            Log.i(BLE + "1111111111111", "mWriteCharacteristic is null");
+        } else if (mWriteCharacteristic.setValue(data, BluetoothGattCharacteristic.FORMAT_UINT8, 0)
+                && mBluetoothGatt.writeCharacteristic(mWriteCharacteristic)) {
             Log.d(BLE, "send data OK");
         }
 
-    };
+    }
+
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +206,8 @@ int test =0;
         mTime = (TextView) findViewById(R.id.equipment_setting_time);
         mHealthMode = (TextView) findViewById(R.id.elec_fan_health_mode_txt);
         mConfirm = (Button) findViewById(R.id.equipment_setting_confirm);
+        mFrameAnim = (ImageView) findViewById(R.id.electric_fan_frame_anim);
+        animationDrawable = (AnimationDrawable) mFrameAnim.getBackground();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -205,6 +221,7 @@ int test =0;
             mHealthMode.setText(R.string.electric_fan_setting_health_mode);
             mConfirm.requestFocus();
             mConfirm.setElevation(10);
+            animationDrawable.start();
         } else {
             mSwitch.setText("关");
             mAirVolume.setText("低");
@@ -233,208 +250,174 @@ int test =0;
     public boolean onKey(View view, int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {//左键
+                LogUtils.e("keyCode", "keyCode = " + keyCode);
+
                 switch (view.getId()) {
                     case R.id.equipment_setting_switch://风扇开关
-                        setSettingText(mSwitch, switchTxt);
-                        if (mSwitch.getText().toString() == "开") {
-                            datanum[0] = 128;
+                        if (a >= switchTxt.length){
+                            a = 0;
+                        }
+                        mSwitch.setText(switchTxt[a]);
+                        a ++;
+//                        setSettingText(mSwitch, switchTxt);
+                        if (mSwitch.getText().toString().trim() == "开") {
                             test = 2;
+                            animationDrawable.start();
                         } else {
-                            datanum[0] = 0;
-                            test =1;
+                            test = 1;
+                            animationDrawable.stop();
                         }
                         break;
                     case R.id.equipment_setting_air_volume://风量
-                        setSettingText(mAirVolume, airVolume);
-                        test = 2;
-                        switch (mAirVolume.getText().toString()) {
-                           // test =2;
-                            case "低":
-                                datanum[1] = 0;
-                                break;
-                            case "中":
-                                datanum[1] = 32;
-                                break;
-                            case "高":
-                                datanum[1] = 64;
-                                break;
+                        if (b >= airVolume.length){
+                            b = 0;
                         }
+                        mAirVolume.setText(airVolume[b]);
+                        b ++;
+//                        setSettingText(mAirVolume, airVolume);
+                        test = 2;
                         break;
                     case R.id.equipment_setting_air_direction://风向
-                        setSettingText(mAirDirection, airDirection);
-                        test = 4;
-                        switch (mAirDirection.getText().toString()) {
-                            case "固定":
-                                datanum[2] =0;
-                                break;
-                            case "摆动":
-                                datanum[2] =16;
-                                break;
+                        if (c >= airDirection.length){
+                            c = 0;
                         }
+                        mAirDirection.setText(airDirection[c]);
+                        c ++;
+//                        setSettingText(mAirDirection, airDirection);
+                        test = 4;
                         break;
                     case R.id.equipment_setting_time://定时
-                        setSettingText(mTime, time);
-                        test = 3;
-                        switch (mTime.getText().toString()) {
-                            case "关":
-                                datanum[3] = 0;
-                                break;
-                            case "1H":
-                                datanum[3] = 4;
-                                break;
-                            case "2H":
-                                datanum[3] = 8;
-                                break;
-                            case "3H":
-                                datanum[3] = 12;
-                                break;
+                        if (d >= time.length){
+                            d = 0;
                         }
+                        mTime.setText(time[d]);
+                        d ++;
+//                        setSettingText(mTime, time);
+                        test = 3;
                         break;
                     default:
                         break;
                 }
+                new SendListener().start();
 
             }
             if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {//右键
+                LogUtils.e("keyCode", "keyCode = " + keyCode);
+
                 switch (view.getId()) {
                     case R.id.equipment_setting_switch:
-                        setSettingText(mSwitch, switchTxt);
-                        if (mSwitch.getText().toString() == "开") {
+                        if (a >= switchTxt.length){
+                            a = 0;
+                        }
+                        mSwitch.setText(switchTxt[a]);
+                        a ++;
+//                        setSettingText(mSwitch, switchTxt);
+                        if (mSwitch.getText().toString().trim() == "开") {
                             test = 2;
-                            datanum[0] = 128;
+                            animationDrawable.start();
                         } else {
                             test = 1;
-                            datanum[0] = 0;
+                            animationDrawable.stop();
                         }
                         break;
                     case R.id.equipment_setting_air_volume:
-                        setSettingText(mAirVolume, airVolume);
-                            test = 2;
-                        switch (mAirVolume.getText().toString()) {
-                            case "低":
-
-                                datanum[1] = 0;
-                                break;
-                            case "中":
-
-                                datanum[1] = 32;
-                                break;
-                            case "高":
-
-                                datanum[1] = 64;
-                                break;
+                        if (b >= airVolume.length){
+                            b = 0;
                         }
+                        mAirVolume.setText(airVolume[b]);
+                        b ++;
+//                        setSettingText(mAirVolume, airVolume);
+                        test = 2;
                         break;
                     case R.id.equipment_setting_air_direction:
-                        setSettingText(mAirDirection, airDirection);
-                        test = 4;
-                        switch (mAirDirection.getText().toString()) {
-                            case "固定":
-
-                                datanum[2] = 0;
-                                break;
-                            case "摆动":
-
-                                datanum[2] = 16;
-                                break;
+                        if (c >= airDirection.length){
+                            c = 0;
                         }
+                        mAirDirection.setText(airDirection[c]);
+                        c ++;
+//                        setSettingText(mAirDirection, airDirection);
+                        test = 4;
                         break;
                     case R.id.equipment_setting_time:
-                        setSettingText(mTime, time);
-                        Settings[3] = mTime.getText().toString();
-                        test = 3;
-                        switch (mTime.getText().toString()) {
-                            case "关":
-
-                                datanum[3] = 0;
-                                break;
-                            case "1H":
-
-                                datanum[3] = 4;
-                                break;
-                            case "2H":
-
-                                datanum[3] = 8;
-                                break;
-                            case "3H":
-
-                                datanum[3] = 12;
-                                break;
+                        if (d >= time.length){
+                            d = 0;
                         }
+                        mTime.setText(time[d]);
+                        d ++;
+//                        setSettingText(mTime, time);
+                        test = 3;
                         break;
                     default:
                         break;
                 }
-                //发送左键的码值
-                //		mBleControl.sendData(SharedPreferencesUtils.getString("0x4F").getBytes());
+                new SendListener().start();
             }
         }
-     new SendListener().start();
+
         return false;
     }
 
     private class SendListener extends Thread {
         @Override
         public void run() {
-            for(int i = 0; i <4; i++){
-                Data+=datanum[i];
-            }
+
 
             try {
 
-                if(_health_mode){
-                    Log.i(BLE+"1111111111111", "180");
-                    for(int i = 0; i < order.length;i++)
-                    {
-                        Log.i(BLE+"1111111111111", order[i]+"");
+                if (_health_mode) {
+                    for (int i = 0; i < order.length; i++) {
+                        Log.i(BLE + "1111111111111order", order[i] + "");
                         sendData(order[i]);
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                     }
 
-                   // sendData(180);
-                }else {
-                    Log.i(BLE+"1111111111111",test+"");
+                } else {
+                    Log.i(BLE + "1111111111111test", test + "");
                     sendData(test);
+                    Thread.sleep(1000);
                 }
-                Thread.sleep(1000);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Data=0;
+            Data = 0;
         }
     }
 
     @Override
     public void onClick(View view) {
-        if(_health_mode) {
+        if (_health_mode) {
             new SendListener().start();
         }
-        Intent2Activity(HomeActivity.class);
+        Intent2Activity(ELECTRIC_FAN_FLAG,HomeActivity.class);
     }
 
     int i = 0;
 
     private void setSettingText(TextView textView, String str[]) {
+
         if (i >= str.length) {
             i = 0;
         }
+        LogUtils.d("mobile", "i = " + i);
         textView.setText(str[i]);
         i++;
 
-        LogUtils.d("TAG", i + "");
+        if (!textView.hasFocus()) {
+            i = 0;
+        }
+        LogUtils.d("mobile", "i = " + i);
     }
-
-
 
 
     // 检测蓝牙的连接状态
     public void bluetoothDetection() {
-        Log.i(BLE+"111111111111111","come in bluetoothdetection");
+        Log.i(BLE + "111111111111111", "come in bluetoothdetection");
         mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         // 判断蓝牙是否打开
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
-            Log.i(BLE+"1111111111"," adapter is null");
+            Log.i(BLE + "1111111111", " adapter is null");
             Intent enableIntent = new Intent(mBluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, 0);
         }
@@ -445,16 +428,26 @@ int test =0;
             for (BluetoothDevice device : pairdevice) {
                 if (device != null) {
                     Log.i("1111111111", "配对 " + device);
-                     mBluetoothDevice = device;
+                    mBluetoothDevice = device;
                 }
             }
+        } else {
+            Log.i(BLE + "1111111111111", "pairdevice is null");
+        }
+        //蓝牙未连接会出现APP闪退
+        if(mBluetoothDevice != null){
+        mBluetoothGatt = mBluetoothDevice.connectGatt(ElectricFanSettingActivity.this, false,
+                mCallback);
         }
         else{
-            Log.i(BLE+"1111111111111","pairdevice is null");
+            Toast.makeText(getApplicationContext(), "亲爱哒~，要连接小云哦^_^", Toast.LENGTH_SHORT).show();
         }
-         mBluetoothGatt =  mBluetoothDevice .connectGatt(ElectricFanSettingActivity.this, false,
-         mCallback);
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        animationDrawable.stop();
+    }
 }

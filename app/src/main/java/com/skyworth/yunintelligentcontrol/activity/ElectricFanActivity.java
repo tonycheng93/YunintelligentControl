@@ -117,7 +117,8 @@ public class ElectricFanActivity extends BaseActivity
     @Override
     public boolean onKey(View view, int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER
+                    || keyCode == KeyEvent.KEYCODE_ENTER) {
                 switch (view.getId()) {
                     case R.id.elec_fan_brand_choice:
                         mElecFanBrand.expand();
@@ -152,9 +153,9 @@ public class ElectricFanActivity extends BaseActivity
                         intent.putExtra("_health_mode", EXTRA_FLAG);
                         startActivity(intent);
                     }
-                }else if (HomeActivity.FREEZER_FLAG.equalsIgnoreCase(equipment_flag)){
+                } else if (HomeActivity.FREEZER_FLAG.equalsIgnoreCase(equipment_flag)) {
                     Intent2Activity(FreezerSettingActivity.class);
-                }else if (HomeActivity.AIR_CLEANER_FLAG.equalsIgnoreCase(equipment_flag)){
+                } else if (HomeActivity.AIR_CLEANER_FLAG.equalsIgnoreCase(equipment_flag)) {
                     Intent2Activity(AirCleanerSettingActivity.class);
                 }
                 break;

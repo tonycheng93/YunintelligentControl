@@ -166,13 +166,13 @@ public class RecycleWheelView extends RecyclerView {
     protected void onMeasure(int widthSpec, int heightSpec) {
         super.onMeasure(widthSpec, heightSpec);
         if (getChildCount() > 0) {
-            View view = getChildAt(0);
+            View view = getChildAt(2);//设为为2的原因是，五个view，初始化时聚焦在中间
             int paddingH = (getWidth() - view.getWidth()) >> 1;
             int paddingV = (getHeight() - view.getHeight()) >> 1;
             if (getLayoutManager().canScrollHorizontally()) {
                 if (getPaddingLeft() != paddingH || getPaddingRight() != paddingH) {
                     setPadding(paddingH, mOldPaddingTop, paddingH, mOldPaddingBottom);
-                    scrollToPosition(0);
+                    scrollToPosition(2);//聚焦到中间显示
                     // mUpdateHandler.sendEmptyMessageDelayed(0, 60);
                 }
             } else {
@@ -312,10 +312,4 @@ public class RecycleWheelView extends RecyclerView {
     public interface OnSelectItemListener {
         void onSelectChanged(int position);
     }
-
-//    @Override
-//    public void scrollToPosition(int position) {
-//        mNeedAdjust = true;
-//        super.scrollToPosition(position);
-//    }
 }

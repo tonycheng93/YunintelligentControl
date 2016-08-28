@@ -11,9 +11,11 @@
  */
 package com.skyworth.yunintelligentcontrol.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -122,39 +124,38 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
         resId.add(R.drawable.box_home_focus);
         resId.add(R.drawable.air_condition_home_focus);
 
-        if ( parm != null && parm.equalsIgnoreCase(ElectricFanSettingActivity.ELECTRIC_FAN_FLAG)){
-            mIvHomeBackground.setBackgroundResource(R.drawable.electric_fan_home_with_parm_focus);
-        }else {
+//        if ( parm != null && parm.equalsIgnoreCase(ElectricFanSettingActivity.ELECTRIC_FAN_FLAG)){
+//            mIvHomeBackground.setBackgroundResource(R.drawable.electric_fan_home_with_parm_focus);
+//        }else {
 
 //        rv_wheel.requestFocus();
-            mIvHomeBackground.requestFocus();
+        mIvHomeBackground.requestFocus();
 
-            mNightIsShown = SharedPreferencesUtils.getBoolean("night_mode");
-            if (mNightIsShown) {
-                mNight.setVisibility(View.VISIBLE);
-                mDayTime.setVisibility(View.GONE);
-            } else {
-                mNight.setVisibility(View.GONE);
-                mDayTime.setVisibility(View.VISIBLE);
-            }
-
-            mDayTime.setOnClickListener(this);
-            mNight.setOnClickListener(this);
-            mEquipmentCenter.setOnClickListener(this);
-//        rv_wheel.setOnKeyListener(this);
-            mIvHomeBackground.setOnKeyListener(this);
+        mNightIsShown = SharedPreferencesUtils.getBoolean("night_mode");
+        if (mNightIsShown) {
+            mNight.setVisibility(View.VISIBLE);
+            mDayTime.setVisibility(View.GONE);
+        } else {
+            mNight.setVisibility(View.GONE);
+            mDayTime.setVisibility(View.VISIBLE);
         }
 
-
-
+        mDayTime.setOnClickListener(this);
+        mNight.setOnClickListener(this);
+        mEquipmentCenter.setOnClickListener(this);
+//        rv_wheel.setOnKeyListener(this);
+        mIvHomeBackground.setOnKeyListener(this);
     }
+
+
+//    }
 
     @Override
     public void getData() {
         Intent data = getIntent();
-        if (data != null){
+        if (data != null) {
             parm = data.getStringExtra(Constant.EXTRA_NAME);
-        }else {
+        } else {
             parm = null;
         }
     }
@@ -236,7 +237,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
                 break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 if (position > 0) {
-                    position --;
+                    position--;
 
                 }
                 LogUtils.d("TAG", "position = " + position);
@@ -328,8 +329,17 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        ActivityUtils.finishAll();
+//        super.onBackPressed();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("亲爱的小主，是否要退出应用？");
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ActivityUtils.finishAll();
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -338,15 +348,15 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
             switch (keyCode) {
                 case KeyEvent.KEYCODE_DPAD_CENTER:
                 case KeyEvent.KEYCODE_ENTER:
-                    if (resId.get(position) == R.drawable.electric_fan_home_focus){
-                        Intent2Activity(ELECTRIC_FAN_FLAG,ElectricFanActivity.class);
-                    }else if (resId.get(position) == R.drawable.freezer_home_focus){
-                        Intent2Activity(FREEZER_FLAG,ElectricFanActivity.class);
-                    }else if (resId.get(position) == R.drawable.air_cleaner_home_focus ){
-                        Intent2Activity(AIR_CLEANER_FLAG,ElectricFanActivity.class);
-                    }else if (resId.get(position) == R.drawable.box_home_focus){
-                        Intent2Activity(BOX_FLAG,ElectricFanActivity.class);
-                    }else if (resId.get(position) == R.drawable.air_condition_home_focus){
+                    if (resId.get(position) == R.drawable.electric_fan_home_focus) {
+                        Intent2Activity(ELECTRIC_FAN_FLAG, ElectricFanActivity.class);
+                    } else if (resId.get(position) == R.drawable.freezer_home_focus) {
+                        Intent2Activity(FREEZER_FLAG, ElectricFanActivity.class);
+                    } else if (resId.get(position) == R.drawable.air_cleaner_home_focus) {
+                        Intent2Activity(AIR_CLEANER_FLAG, ElectricFanActivity.class);
+                    } else if (resId.get(position) == R.drawable.box_home_focus) {
+                        Intent2Activity(BOX_FLAG, ElectricFanActivity.class);
+                    } else if (resId.get(position) == R.drawable.air_condition_home_focus) {
                         Intent2Activity(AIR_CONDITION_FLAG, ElectricFanActivity.class);
                     }
                     break;

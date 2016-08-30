@@ -340,6 +340,7 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
             }
         });
         builder.show();
+        System.exit(0);
     }
 
     @Override
@@ -391,4 +392,6 @@ public class HomeActivity extends BaseActivity implements OnClickListener, View.
         }
         return false;
     }
+
+
 }

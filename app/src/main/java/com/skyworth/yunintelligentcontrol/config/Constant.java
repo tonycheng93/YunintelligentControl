@@ -23,4 +23,11 @@ public class Constant {
     public static final boolean ISDEBUG = true;
     //Activity之间参数传递标志
     public static final String EXTRA_NAME = "extra_flag";
+    //保存设备设置界面的参数值
+    public static final String SWITCH_FLAG="switch";
+    public static final String AIR_VOLUME_FLAG="air_volume";
+    public static final String AIR_DIRECTION_FLAG="air_direction";
+    public static final String TIME_FLAG="time";
+    //判断是否第一次进入设置界面
+    public static final String IS_FIRST_IN = "is_first_in";
 }

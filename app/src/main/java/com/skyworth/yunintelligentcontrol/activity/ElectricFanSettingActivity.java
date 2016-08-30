@@ -27,7 +27,9 @@ import android.widget.Toast;
 
 import com.skyworth.yunintelligentcontrol.R;
 import com.skyworth.yunintelligentcontrol.activity.base.BaseActivity;
+import com.skyworth.yunintelligentcontrol.config.Constant;
 import com.skyworth.yunintelligentcontrol.utils.LogUtils;
+import com.skyworth.yunintelligentcontrol.utils.SharedPreferencesUtils;
 
 import java.util.Set;
 import java.util.UUID;
@@ -50,6 +52,12 @@ public class ElectricFanSettingActivity extends BaseActivity implements OnKeyLis
     private String airVolume[] = {"中", "高", "低"};
     private String airDirection[] = {"摆动", "固定"};
     private String time[] = {"1H", "2H", "3H", "关"};
+
+    private boolean isFirstIn;
+    private String switchTxtDef = "";
+    private String airVolumeDef = "";
+    private String airDirectionDef = "";
+    private String timeDef = "";
 
     private AnimationDrawable animationDrawable;
 
@@ -194,6 +202,12 @@ public class ElectricFanSettingActivity extends BaseActivity implements OnKeyLis
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        isFirstIn = false;
+    }
+
+    @Override
     public void setContentView() {
         setContentView(R.layout.activity_electric_fan_setting);
     }
@@ -213,22 +227,39 @@ public class ElectricFanSettingActivity extends BaseActivity implements OnKeyLis
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void initView() {
-        if (_health_mode) {
-            mSwitch.setText("开");
-            mAirVolume.setText("中");
-            mAirDirection.setText("摆动");
-            mTime.setText("1H");
-            mHealthMode.setText(R.string.electric_fan_setting_health_mode);
-            mConfirm.requestFocus();
-            mConfirm.setElevation(10);
-            animationDrawable.start();
-        } else {
-            mSwitch.setText("关");
-            mAirVolume.setText("低");
-            mAirDirection.setText("固定");
-            mTime.setText("关");
-            mHealthMode.setText("");
+
+        isFirstIn = SharedPreferencesUtils.getBoolean(Constant.IS_FIRST_IN);
+        switchTxtDef = SharedPreferencesUtils.getString(Constant.SWITCH_FLAG);
+        airVolumeDef = SharedPreferencesUtils.getString(Constant.AIR_VOLUME_FLAG);
+        airDirectionDef = SharedPreferencesUtils.getString(Constant.AIR_DIRECTION_FLAG);
+        timeDef = SharedPreferencesUtils.getString(Constant.TIME_FLAG);
+        if (isFirstIn){
+            if (_health_mode) {
+                mSwitch.setText("开");
+                mAirVolume.setText("中");
+                mAirDirection.setText("摆动");
+                mTime.setText("1H");
+                mHealthMode.setText(R.string.electric_fan_setting_health_mode);
+                mConfirm.requestFocus();
+                mConfirm.setElevation(10);
+                animationDrawable.start();
+            } else {
+                mSwitch.setText("关");
+                mAirVolume.setText("低");
+                mAirDirection.setText("固定");
+                mTime.setText("关");
+                mHealthMode.setText("");
+            }
+        }else {
+            if ( ! switchTxtDef.isEmpty() && ! airVolumeDef.isEmpty() &&
+                    ! airDirectionDef.isEmpty() && ! timeDef.isEmpty()){
+                mSwitch.setText(switchTxtDef);
+                mAirVolume.setText(airVolumeDef);
+                mAirDirection.setText(airDirectionDef);
+                mTime.setText(timeDef);
+            }
         }
+
 //        if (App.mBluetoothDevice != null) {
 //            mBluetoothGatt = App.mBluetoothDevice.connectGatt(ElectricFanSettingActivity.this, false, mCallback);
 //        }
@@ -446,8 +477,19 @@ public class ElectricFanSettingActivity extends BaseActivity implements OnKeyLis
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferencesUtils.putBoolean(Constant.IS_FIRST_IN,true);
+        SharedPreferencesUtils.putString(Constant.SWITCH_FLAG,mSwitch.getText().toString());
+        SharedPreferencesUtils.putString(Constant.AIR_VOLUME_FLAG,mAirVolume.getText().toString());
+        SharedPreferencesUtils.putString(Constant.AIR_DIRECTION_FLAG,mAirDirection.getText().toString());
+        SharedPreferencesUtils.putString(Constant.TIME_FLAG,mTime.getText().toString());
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         animationDrawable.stop();
+        SharedPreferencesUtils.clearAll();
     }
 }
